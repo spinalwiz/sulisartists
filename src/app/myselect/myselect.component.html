@@ -1,0 +1,13 @@
+<div style="width: 300px; margin-bottom: 20px;">
+  <ng-select [allowClear]="true"
+             [items]="items"
+             (data)="refreshValue($event)"
+             (selected)="selected($event)"
+             (removed)="removed($event)"
+             (typed)="typed($event)"
+             placeholder="Select from the list or Start Typing...">
+  </ng-select>
+  <p></p>
+  <pre>{{value.text}}</pre>
+
+</div>

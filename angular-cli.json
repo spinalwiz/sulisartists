@@ -18,7 +18,10 @@
       "prefix": "app",
       "mobile": false,
       "styles": [
-        "styles.css"
+        "styles.css",
+        "assets/bootstrap.min.css",
+        "assets/ng2-select.css",
+        "../node_modules/angular2-data-table/release/datatable.css"
       ],
       "scripts": [],
       "environments": {

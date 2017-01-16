@@ -1,4 +1,19 @@
 <h1>
-  {{title}}
+  Sulis Artists Orders
 </h1>
+
+<h3>Artist: </h3>
+<myselect #artistSelect></myselect>
+<h3>Customer:</h3>
+<myselect #customerSelect></myselect>
+
+<swui-datatable
+  class="material striped"
+  [rows]="rows | async"
+  [columns]="columns">
+</swui-datatable>
+
+<!--<p *ngFor="let row of allData">{{row.artist}}:  {{row.customer}} {{row.sku}}</p>-->
+
+
 <router-outlet></router-outlet>
