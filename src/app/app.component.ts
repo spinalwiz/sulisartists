@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {DataService} from "./data.service";
 import * as _ from "lodash";
-import {Observable, ObjectUnsubscribedError} from "rxjs";
+import {Observable} from "rxjs";
+import {SelectComponent} from "ng2-select";
 
 @Component({
   selector: 'app-root',
@@ -16,21 +17,27 @@ export class AppComponent implements OnInit {
   rows: Observable<any[]>;
   rowsCopy: Observable<any[]>;
 
+
   columns = [
-    { prop: 'sku' },
-    {
-      name: 'artist',
-      width: 500
-    },
-    { name: 'Value' },
+    { prop: 'sku',
+      width:50   },
+    { name: 'artist',
+      width: 500 },
+    { prop: 'base_total_paid',
+      name: 'Value',
+      width: 50 },
     { name: 'Customer' },
-    { name: 'Email' },
-    { name: 'Date' },
-    { name: 'Status' }
+    { prop: 'customer_email',
+      name: 'Email' },
+    { prop: 'created_at',
+      name: 'Date' }
   ];
 
-  @ViewChild('artistSelect') artistSelect;
-  @ViewChild('customerSelect') customerSelect;
+  @ViewChild('artistSelect')
+  private myArtistSelect;
+
+  @ViewChild('customerSelect')
+  private myCustomerSelect: SelectComponent;
 
   constructor(private dataService: DataService) {
 
@@ -40,46 +47,51 @@ export class AppComponent implements OnInit {
     this.getData();
     this.rows = this.dataService.getAllData();
     this.rowsCopy = this.rows; //to preserve original data
-  }
 
-  updateArtistFilter(input) {
-    console.log("parent search input ", input);
-    let val = input.toLowerCase();
-
-    let newData = [];
-
-
-    let subscription = this.rowsCopy.subscribe(
-      data => {
-        newData = data;
-      },
-      err => console.log(err),
-      () => {
-        newData = newData
-          .filter(entry => {
-              if (entry.artist) {
-                return entry.artist.toLowerCase().includes(val);
-              }
-            });
-        console.log(newData);
-        this.rows = Observable.of(newData);
+    this.myArtistSelect.onRemoved.subscribe(
+      (m) => {
+        // debugger;
+        this.resetData();
       }
     );
 
-    // let subscription = this.rowsCopy.map(
-    //   data => {
-    //     newData = data.filter(entry => {
-    //       if (entry.artist) {
-    //         return entry.artist.toLowerCase().includes(val);
-    //       }
-    //     });
-    //     console.log(newData);
-    //     this.rows = Observable.of(newData);
-    //   }
-    // );
-
-    subscription.unsubscribe();
   }
+
+  resetData() {
+    console.log("resetting");
+    this.rows = this.rowsCopy; // do this better
+  }
+
+
+  updateArtistFilter(input) {
+    let subscription = this.rowsCopy.map(
+      data => {
+        return data.filter(entry => {
+          if (entry.artist) {
+            return entry.artist.toLowerCase().includes(input.toLowerCase());
+          }
+        });
+      }
+    ).subscribe(
+      data => this.rows = Observable.of(data)
+    );
+  }
+
+  updateCustomerFilter(input) {
+    let subscription = this.rowsCopy.map(
+      data => {
+        return data.filter(entry => {
+          if (entry.customer) {
+            return entry.customer.toLowerCase().includes(input.toLowerCase());
+          }
+        });
+      }
+    ).subscribe(
+      data => this.rows = Observable.of(data)
+    );
+  }
+
+  c
 
   getData(){
     this.dataService.getAllData()
@@ -92,7 +104,7 @@ export class AppComponent implements OnInit {
       .subscribe(
         data => {
           this.artistNames = _.map(data, 'artist');
-          this.artistSelect.items = _.map(this.artistNames, function(value, index) {
+          this.myArtistSelect.items = _.map(this.artistNames, function(value, index) {
             return {"text": value, "id":index}
           });
         },
@@ -103,7 +115,7 @@ export class AppComponent implements OnInit {
       .subscribe(
         data => {
           this.customerNames = _.map(data, 'customer');
-          this.customerSelect.items = _.map(this.customerNames, function(value, index) {
+          this.myCustomerSelect.items = _.map(this.customerNames, function(value, index) {
             return {"text": value, "id":index}
           });
         },

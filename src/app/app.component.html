@@ -7,22 +7,11 @@
     </div>
 
 <h3>Artist: </h3>
-<myselect (onTyped)='updateArtistFilter($event)' #artistSelect></myselect>
-    <!--<input-->
-      <!--type='text'-->
-      <!--style='padding:8px;margin:15px auto;width:30%;'-->
-      <!--placeholder='Type to filter by Artist..'-->
-      <!--(keyup)='updateArtistFilter($event)'-->
-    <!--/>-->
-<h3>Customer:</h3>
-<myselect (onTyped)='updateCustomerFilter($event)' #customerSelect></myselect>
-    <!--<input-->
-      <!--type='text'-->
-      <!--style='padding:8px;margin:15px auto;width:30%;'-->
-      <!--placeholder='Type to filter by Artist..'-->
-      <!--(keyup)='updateCustomerFilter($event)'-->
-    <!--/>-->
+<myselect (onTyped)='updateArtistFilter($event, "artist")' (onSelected)='updateArtistFilter($event, "artist")' #artistSelect></myselect>
 
+
+<h3>Customer:</h3>
+<myselect (onTyped)='updateCustomerFilter($event, "customer")' (onSelected)='updateCustomerFilter($event, "customer")' #customerSelect></myselect>
 
 <ngx-datatable
   class="material striped fullscreen"

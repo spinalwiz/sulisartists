@@ -5,8 +5,10 @@
              (selected)="selected($event)"
              (removed)="removed($event)"
              (typed)="typed($event)"
-             placeholder="Select from the list or Start Typing...">
+             placeholder="Select from the list or start typing..."
+             #mySelect>
   </ng-select>
+  <button (click)="clearArtistSelect()">Clear</button>
   <p></p>
   <pre>{{value.text}}</pre>
 
