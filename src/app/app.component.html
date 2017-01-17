@@ -1,19 +1,42 @@
-<h1>
-  Sulis Artists Orders
-</h1>
+<div class="container-fluid">
+
+    <div class="page-header">
+      <h1>
+        <span>Sulis Artists Tool</span><br/>
+      </h1>
+    </div>
 
 <h3>Artist: </h3>
-<myselect #artistSelect></myselect>
+<myselect (onTyped)='updateArtistFilter($event)' #artistSelect></myselect>
+    <!--<input-->
+      <!--type='text'-->
+      <!--style='padding:8px;margin:15px auto;width:30%;'-->
+      <!--placeholder='Type to filter by Artist..'-->
+      <!--(keyup)='updateArtistFilter($event)'-->
+    <!--/>-->
 <h3>Customer:</h3>
-<myselect #customerSelect></myselect>
+<myselect (onTyped)='updateCustomerFilter($event)' #customerSelect></myselect>
+    <!--<input-->
+      <!--type='text'-->
+      <!--style='padding:8px;margin:15px auto;width:30%;'-->
+      <!--placeholder='Type to filter by Artist..'-->
+      <!--(keyup)='updateCustomerFilter($event)'-->
+    <!--/>-->
 
-<swui-datatable
-  class="material striped"
+
+<ngx-datatable
+  class="material striped fullscreen"
+  columnMode="force"
   [rows]="rows | async"
-  [columns]="columns">
-</swui-datatable>
-
+  [columns]="columns"
+  [headerHeight]="50"
+  [footerHeight]="50"
+  [rowHeight]="'auto'"
+  [limit]="50">
+</ngx-datatable>
 <!--<p *ngFor="let row of allData">{{row.artist}}:  {{row.customer}} {{row.sku}}</p>-->
 
 
 <router-outlet></router-outlet>
+
+</div>

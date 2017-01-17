@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'myselect',
@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MyselectComponent implements OnInit {
   items:Array<any>;
+
+  @Output() onTyped = new EventEmitter<boolean>();
 
   constructor() { }
 
@@ -26,7 +28,8 @@ export class MyselectComponent implements OnInit {
   }
 
   public typed(value:any):void {
-    console.log('New search input: ', value);
+    console.log('New search input (child): ', value);
+    this.onTyped.emit(value);
   }
 
   public refreshValue(value:any):void {

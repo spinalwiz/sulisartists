@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {DataService} from "./data.service";
 import * as _ from "lodash";
-import {Observable} from "rxjs";
+import {Observable, ObjectUnsubscribedError} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -14,24 +14,23 @@ export class AppComponent implements OnInit {
   artistNames: any[];
   customerNames: any[];
   rows: Observable<any[]>;
+  rowsCopy: Observable<any[]>;
 
   columns = [
     { prop: 'sku' },
-    { name: 'artist' },
+    {
+      name: 'artist',
+      width: 500
+    },
     { name: 'Value' },
-    { name: 'Sku' },
     { name: 'Customer' },
     { name: 'Email' },
     { name: 'Date' },
     { name: 'Status' }
-    ];
+  ];
 
   @ViewChild('artistSelect') artistSelect;
   @ViewChild('customerSelect') customerSelect;
-
-
-
-  mode = 'Observable';
 
   constructor(private dataService: DataService) {
 
@@ -40,6 +39,46 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.getData();
     this.rows = this.dataService.getAllData();
+    this.rowsCopy = this.rows; //to preserve original data
+  }
+
+  updateArtistFilter(input) {
+    console.log("parent search input ", input);
+    let val = input.toLowerCase();
+
+    let newData = [];
+
+
+    let subscription = this.rowsCopy.subscribe(
+      data => {
+        newData = data;
+      },
+      err => console.log(err),
+      () => {
+        newData = newData
+          .filter(entry => {
+              if (entry.artist) {
+                return entry.artist.toLowerCase().includes(val);
+              }
+            });
+        console.log(newData);
+        this.rows = Observable.of(newData);
+      }
+    );
+
+    // let subscription = this.rowsCopy.map(
+    //   data => {
+    //     newData = data.filter(entry => {
+    //       if (entry.artist) {
+    //         return entry.artist.toLowerCase().includes(val);
+    //       }
+    //     });
+    //     console.log(newData);
+    //     this.rows = Observable.of(newData);
+    //   }
+    // );
+
+    subscription.unsubscribe();
   }
 
   getData(){

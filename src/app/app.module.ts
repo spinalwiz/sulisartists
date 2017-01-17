@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import {DataService} from "./data.service";
 import {SelectModule} from "ng2-select/ng2-select";
 import { MyselectComponent } from './myselect/myselect.component';
-import {Angular2DataTableModule} from "angular2-data-table";
+import {NgxDatatableModule} from "@swimlane/ngx-datatable";
 
 @NgModule({
   declarations: [
@@ -22,7 +22,7 @@ import {Angular2DataTableModule} from "angular2-data-table";
     AppRoutingModule,
     JsonpModule,
     SelectModule,
-    Angular2DataTableModule
+    NgxDatatableModule
   ],
   providers: [DataService],
   bootstrap: [AppComponent]
